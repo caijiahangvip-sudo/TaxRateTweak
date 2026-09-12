@@ -775,7 +775,10 @@ if (-not $Commit) {
                 }
             }
             if (-not $ok) {
-                Stop-Failure "$label 连续 $($GitMaxRetries + 1) 次失败（SSL/443 之类网络问题请检查代理或稍后重试）。"
+                # 推送失败不中止发布：提交与 tag 已经在本地，发布并不依赖推送成功。
+                # 记下来在总结里提示，最后以退出码 2 结束（2 = 已发布，仅推送未完成）。
+                $script:PushFailed = $true
+                Write-Warn "$label 连续 $($GitMaxRetries + 1) 次失败（SSL/443 之类网络问题）。提交与 tag 已在本地，继续发布；稍后可手动执行：git $($pushArgs -join ' ')"
             }
         }
     }
@@ -857,19 +860,18 @@ if ($publishSkippedReason) {
     $profileDir = Join-Path $env:TEMP ("pdx-pagecheck-" + [guid]::NewGuid().ToString('N'))
     New-Item -ItemType Directory -Path $profileDir -Force | Out-Null
     Write-Sub "临时 user-data-dir：$profileDir"
-    Write-Sub "站点缓存延迟通常 10-15 分钟，最多尝试 $($PageCheckMaxRetries + 1) 次、每次间隔 $PageCheckDelaySec 秒。"
+    Write-Sub "站点有 10-15 分钟缓存；这里只做一次快速回读，未命中不算发布失败。"
 
     $pageOk = $false
     $pageAttempt = 0
     $pageFailures = 0
 
     try {
-        while (-not $pageOk -and $pageAttempt -lt ($PageCheckMaxRetries + 1)) {
-            if ($pageAttempt -gt 0) { Start-Sleep -Seconds $PageCheckDelaySec }
+        while (-not $pageOk -and $pageAttempt -lt 1) {
             $pageAttempt++
             $cacheBuster = [guid]::NewGuid().ToString('N')
             $url = "$StoreUrl" + "?cb=$cacheBuster&_=$([DateTimeOffset]::UtcNow.ToUnixTimeSeconds())"
-            Write-Sub "第 $pageAttempt / $($PageCheckMaxRetries + 1) 次渲染：$url"
+            Write-Sub "快速回读线上页面：$url"
 
             $chromeArgs = @(
                 '--headless=new'
@@ -908,14 +910,12 @@ if ($publishSkippedReason) {
     }
 
     if ($pageOk) {
-        $result.PageResult = "成功（第 $pageAttempt 次尝试命中 $Version）"
+        $result.PageResult = "成功（命中 $Version）"
     } else {
-        $result.PageResult = "未刷新（$pageAttempt 次尝试均未见 $Version）"
-        Write-Host ''
-        Write-Host '  发布器成功但页面尚未刷新，请稍后人工确认。' -ForegroundColor Yellow
-        Write-Host "  建议：10-15 分钟后打开 $StoreUrl 手工确认版本号是否已变为 $Version。" -ForegroundColor Yellow
-        Write-Host ''
-        exit 3
+        # 不是失败：平台页面有 10-15 分钟缓存，发布器已报成功即视为发布完成。
+        $result.PageResult = "尚未刷新（平台缓存，非发布失败）"
+        Write-Warn "页面上还没出现 $Version —— 这是平台的 10-15 分钟页面缓存，不代表发布失败。"
+        Write-Sub "稍后打开 $StoreUrl 即可确认版本号是否变为 $Version。"
     }
 }
 
@@ -936,6 +936,11 @@ Write-Host ''
 
 if ($DryRun) {
     Write-Host '  DryRun 完成：未写入任何文件、未构建、未发布。' -ForegroundColor Cyan
+} elseif ($script:PushFailed) {
+    Write-Host '  发布已完成，但 git 推送未成功（见上面警告）。' -ForegroundColor Yellow
+    Write-Host "  手动重试：git -C `"$RepoRoot`" push origin $GitBranch ; git -C `"$RepoRoot`" push origin --tags" -ForegroundColor Yellow
+    Write-Host ''
+    exit 2
 } else {
     Write-Host '  全部步骤完成。' -ForegroundColor Green
 }

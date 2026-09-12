@@ -37,6 +37,9 @@ openclaw-data;D/
 pdx-mods/*/
 !pdx-mods/TaxRateTweak/
 
+# pdx-mods 目录下的非目标文件（保留在 pdx-mods 根目录的说明文档）
+pdx-mods/_CONVERSION_GUIDE.md
+
 # 不属于本仓库范围的其它项目 / 实验目录
 pdx-poc/
 lego/

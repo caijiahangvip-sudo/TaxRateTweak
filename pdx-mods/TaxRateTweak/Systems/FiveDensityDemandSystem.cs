@@ -187,7 +187,7 @@ namespace TaxRateTweak.Systems
             if (!m_Logged)
             {
                 m_Logged = true;
-                Mod.log.Info($"Five-density demand 1.8.25 ready: low/row/medium/high/low-rent; properties {string.Join("/", Total)}; unlocked {string.Join("/", m_Unlocked)}; demand {Levels.Low}/{Levels.Row}/{Levels.Medium}/{Levels.High}/{Levels.LowRent}; no spawn culling.");
+                Mod.log.Info($"Five-density demand 1.8.26 ready: low/row/medium/high/low-rent; properties {string.Join("/", Total)}; unlocked {string.Join("/", m_Unlocked)}; demand {Levels.Low}/{Levels.Row}/{Levels.Medium}/{Levels.High}/{Levels.LowRent}; no spawn culling.");
             }
             return true;
         }

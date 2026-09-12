@@ -30,3 +30,16 @@ tmp/
 # ===== 其它大体量 / 外部数据目录 =====
 openclaw-data/
 openclaw-data;D/
+
+# ===== 仓库范围：只跟踪这一个模组（用户要求）=====
+# 先排除 pdx-mods 下所有子目录，再单独放行 TaxRateTweak。
+# 这样即使误敲 `git add .`，其它项目也不会被扫进来。
+pdx-mods/*/
+!pdx-mods/TaxRateTweak/
+
+# 不属于本仓库范围的其它项目 / 实验目录
+pdx-poc/
+lego/
+mod-template/
+pipeline/
+spike/

@@ -30,7 +30,7 @@ namespace TaxRateTweak.Systems
             m_Demand = World.GetOrCreateSystemManaged<FiveDensityDemandSystem>();
             m_Vanilla = World.GetOrCreateSystemManaged<ResidentialDemandSystem>();
             AddBinding(m_Binding = new RawValueBinding("TaxRateTweak", "densityDemand", WriteDemand));
-            Mod.log.Info("TaxRateTweak 1.8.26: five-density UI binding registered.");
+            Mod.log.Info("TaxRateTweak 1.8.27: five-density UI binding registered.");
         }
 
         protected override void OnUpdate()

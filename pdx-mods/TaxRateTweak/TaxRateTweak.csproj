@@ -1,0 +1,125 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<Configurations>Debug;Release</Configurations>
+		<AssemblyName>TaxRateTweak</AssemblyName>
+		<RootNamespace>TaxRateTweak</RootNamespace>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+		<RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+
+		<!--The file where mod information which is required for publishing mod on PDX mods are stored-->
+		<PublishConfigurationPath>Properties\PublishConfiguration.xml</PublishConfigurationPath>
+	</PropertyGroup>
+
+	<!--Imports must be after PropertyGroup block-->
+	<Import Project="$([System.Environment]::GetEnvironmentVariable('CSII_TOOLPATH', 'EnvironmentVariableTarget.User'))\Mod.props" />
+	<Import Project="$([System.Environment]::GetEnvironmentVariable('CSII_TOOLPATH', 'EnvironmentVariableTarget.User'))\Mod.targets" />
+
+	<!--不部署到本地 Mods 目录：构建产物直接进 PDX 发布 staging 目录，
+	    游戏只加载订阅渠道下载的文件（本地加载会覆盖订阅版本，干扰验证）。
+	    注意：Mod.targets 的 BuildGetFullPaths 目标会在构建时把 DeployDir
+	    重置回 $(LocalModsPath)\$(TargetName)，所以必须在其之后再改回来。-->
+	<PropertyGroup>
+		<DeployDir>C:\cs2-mod-factory\pdx-staging\TaxRateTweak</DeployDir>
+	</PropertyGroup>
+	<Target Name="RedirectDeployToStaging" AfterTargets="BuildGetFullPaths">
+		<PropertyGroup>
+			<DeployDir>C:\cs2-mod-factory\pdx-staging\TaxRateTweak</DeployDir>
+		</PropertyGroup>
+	</Target>
+
+	<ItemGroup>
+		<Reference Include="Game">
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="Colossal.Core">
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="Colossal.Logging">
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="Colossal.IO.AssetDatabase">
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="Colossal.UI.Binding">
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="Colossal.Localization">
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="Colossal.Mathematics">
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="Colossal.Collections">
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="UnityEngine.CoreModule">
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="UnityEngine.IMGUIModule">
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="UnityEngine.InputLegacyModule">
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="Unity.Burst">
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="Unity.Collections">
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="Unity.Entities">
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="Unity.Mathematics">
+			<Private>false</Private>
+		</Reference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Reference Update="System">
+			<Private>false</Private>
+		</Reference>
+		<Reference Update="System.Core">
+			<Private>false</Private>
+		</Reference>
+		<Reference Update="System.Data">
+			<Private>false</Private>
+		</Reference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="HarmonyX" Version="[2.9.0]" GeneratePathProperty="true" ExcludeAssets="compile;runtime" />
+		<PackageReference Include="MonoMod.RuntimeDetour" Version="[22.1.29.1]" />
+		<Reference Include="$(PkgHarmonyX)\lib\netstandard2.0\0Harmony.dll">
+			<Private>true</Private>
+		</Reference>
+	</ItemGroup>
+
+	<Target Name="ExcludeFrameworkFacadeFromPackage" AfterTargets="ResolveReferences">
+		<ItemGroup>
+			<ReferenceCopyLocalPaths Remove="@(ReferenceCopyLocalPaths)"
+				Condition="'%(ReferenceCopyLocalPaths.Filename)' == 'netstandard'" />
+		</ItemGroup>
+	</Target>
+
+	<Target Name="DeployUIAndVerifyDependencies" AfterTargets="DeployWIP">
+		<ItemGroup>
+			<AdditionalFilesToDeploy Include="UI\TaxRateTweak.mjs" />
+			<AdditionalFilesToDeploy Include="THIRD_PARTY_NOTICES.txt" />
+			<RequiredRuntimeLibrary Include="0Harmony.dll;Mono.Cecil.dll;MonoMod.Utils.dll;MonoMod.RuntimeDetour.dll" />
+		</ItemGroup>
+		<Copy SourceFiles="@(AdditionalFilesToDeploy)"
+			DestinationFiles="@(AdditionalFilesToDeploy->'$(DeployDir)\%(Filename)%(Extension)')" />
+		<Error Condition="!Exists('$(DeployDir)\%(RequiredRuntimeLibrary.Identity)')"
+			Text="Missing runtime dependency in PDX staging: %(RequiredRuntimeLibrary.Identity)" />
+		<Error Condition="Exists('$(DeployDir)\netstandard.dll')"
+			Text="Do not publish the framework netstandard facade; use the game's runtime." />
+	</Target>
+
+	<ItemGroup>
+		<None Include="$(ModPropsFile)" Link="Properties\Mod.props" />
+		<None Include="$(ModTargetsFile)" Link="Properties\Mod.targets" />
+	</ItemGroup>
+
+</Project>

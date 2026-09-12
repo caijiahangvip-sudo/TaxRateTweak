@@ -1,0 +1,32 @@
+# ===== 构建与依赖产物（可从源码重新生成）=====
+[Bb]in/
+[Oo]bj/
+libs/
+Library/
+*.dll
+*.so
+*.bundle
+*.pdb
+*.log
+Logs/
+
+# ===== 派生数据：反编译/反射（由游戏 DLL 重新生成）=====
+decomp/
+reflector/
+reflector2/
+reflectgame/
+
+# ===== 工具二进制 =====
+tools/
+
+# ===== 发布暂存与备份（是产物，不是源码）=====
+pdx-staging/
+pdx_backup_pdx/
+runs/
+
+# ===== 临时工作区 =====
+tmp/
+
+# ===== 其它大体量 / 外部数据目录 =====
+openclaw-data/
+openclaw-data;D/

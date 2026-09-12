@@ -1,0 +1,87 @@
+<Publish>
+	<!--Id must be set in order to update existed mod. it is not required for publishing mod for the first time-->
+	<ModId Value="155720" />
+	<!--Name of the mod to display to players-->
+	<DisplayName Value="TaxRateTweak" />
+	<!--Short description of the mod-->
+	<ShortDescription Value="Five per-density residential taxes with their own housing demand, expanded tax limits, an income exemption policy and vanilla-style happiness effects" />
+	<!--Long description of the mod. Single line or multi line. Supports minimal markdown subset-->
+	<LongDescription>
+日本語:
+- 住宅の5つの密度別税率（低密度／長屋／中密度／高密度／低家賃住宅）を、ネイティブの税制パネルに追加します。
+- 各行が示すのはその密度の付加税率です。世帯の合計住宅税率は「基本税率 + その行の値」になります。
+- 税率の範囲を、バニラの -10%..+30% から -1000%..+100% に拡張します（負の税率は補助金）。
+- 密度ごとの住宅需要：5つの区分を個別に集計・評価し、その区分の税率はその区分の需要だけを動かします。
+- 「免税ライン」都市政策：ライン未満の所得には住宅税がかかりません（基本税と付加税の両方が非課税）。免除のみで、給付は行いません。
+- 付加税は、バニラと同じ計算式・同じ感度で「税」の幸福度要因に反映されます。
+- 金額はすべて住民の財布から実際に徴収され都市の資金に入り、予測はネイティブのパネルに表示されます。
+- ネイティブ方式：既存システムを拡張するだけで、UIを置き換えません。
+
+العربية:
+- خمس نسب ضريبية حسب كثافة السكن (كثافة منخفضة، منازل متلاصقة، كثافة متوسطة، كثافة عالية، وإسكان بإيجار منخفض) مضافة داخل لوحة الضرائب الأصلية.
+- كل سطر يعرض ضريبته الإضافية؛ والنسبة الإجمالية للأسرة = النسبة الأساسية + قيمة ذلك السطر.
+- حدود النسبة موسّعة من -10%..+30% إلى -1000%..+100% (النسبة السالبة تعني دعمًا).
+- الطلب على السكن حسب الكثافة: كل فئة تُحسب وتُقيَّم على حدة، ونسبتها تؤثر على طلبها فقط.
+- سياسة مدينة "حد الإعفاء الضريبي": الدخل دون الحد لا يدفع ضريبة سكنية، الأساسية والإضافية معًا. إعفاء فقط، دون صرف أي دعم.
+- الضرائب الإضافية تؤثر في عامل السعادة "الضرائب" بالمعادلة والحساسية نفسها المستخدمة عند تغيير النسبة العادية.
+- كل المبالغ تُسوّى فعليًا من محافظ الأسر إلى خزينة المدينة، وتظهر التقديرات في اللوحة الأصلية.
+- بأسلوب اللعبة الأصلية: توسيع الأنظمة القائمة فقط، دون استبدال الواجهة.
+
+简体中文:
+- 五档住宅密度税率（低密度／联排／中密度／高密度／廉租房）直接加进原生税收面板。
+- 每行显示的是该档的附加税率；住户合计住宅税率 = 基础税率 + 该行数值。
+- 税率范围从原版 -10%..+30% 放宽到 -1000%..+100%（负税率 = 补贴）。
+- 分密度住房需求：五档各自统计、各自参与选址，本档税率只影响本档需求。
+- "免税线"城市政策：低于免税线的收入不缴住宅税（基础税与附加税一起免征）；只免征，不发放补贴。
+- 附加税按原版同一套公式与灵敏度影响"税收"幸福度因素。
+- 所有金额都从住户钱包真实结算并进入城市金库，预估直接显示在原生面板里。
+- 原生风格：只扩展既有系统，不替换原生界面。
+
+English:
+- Five residential density tax rates (low density / row homes / medium / high / low-rent) added to the native taxation panel.
+- Each row shows its own surcharge; a household's combined residential rate is the base rate plus that row's value.
+- Tax-rate limits widened from -10%..+30% to -1000%..+100% (negative = subsidy).
+- Housing demand per density: each tier is counted and evaluated separately, and its rate only moves its own demand.
+- "Tax Exemption Threshold" city policy: income below the threshold pays no residential tax at all, base rate and density surcharge together. It only exempts, it never pays out.
+- Density surcharges feed the vanilla "Tax" happiness factor with the same formula and sensitivity as a rate change.
+- Every amount settles as real money from household wallets into the city treasury, and forecasts appear in the native panel.
+- Native-style: extends the existing systems and replaces no UI.
+
+Español:
+- Cinco tipos por densidad residencial (baja, casas adosadas, media, alta y alquiler asequible) dentro del panel de impuestos nativo.
+- Cada fila muestra su propio recargo; el tipo combinado de una vivienda es el tipo base más el valor de esa fila.
+- Límites ampliados de -10%..+30% a -1000%..+100% (tipo negativo = subvención).
+- Demanda de vivienda por densidad: cada nivel se cuenta y evalúa por separado, y su tipo solo afecta a su propia demanda.
+- Política "Umbral de exención fiscal": la renta bajo el umbral no paga impuesto residencial, ni el tipo base ni el recargo. Solo exime, nunca paga.
+- Los recargos afectan al factor de felicidad "impuestos" con la misma fórmula y sensibilidad que un cambio de tipo normal.
+- Todos los importes se liquidan como dinero real de los hogares al tesoro municipal, y las previsiones se muestran en el panel nativo.
+- Estilo nativo: solo amplía los sistemas existentes, sin sustituir la interfaz.
+	</LongDescription>
+	<!--Thumbnail-->
+	<Thumbnail Value="Properties/Thumbnail.png" />
+	<!--Screenshot, can be set multiple times-->
+	<Screenshot Value="Properties/Screenshot1.png" />
+	<Screenshot Value="Properties/Screenshot2.png" />
+	<Screenshot Value="Properties/Screenshot3.png" />
+	<Screenshot Value="Properties/Screenshot4.png" />
+	<Screenshot Value="Properties/Screenshot5.png" />
+	<!--Tag, can be set multiple times-->
+	<Tag Value="" />
+	<!--Link to the forum post where the mod can be discussed-->
+	<ForumLink Value="" />
+	<!--Version of the mod-->
+	<ModVersion Value="1.8.23" />
+	<!--Recommended version of the base game to use the mod-->
+	<GameVersion Value="1.6.*" />
+	<!--Dependency for the mod, can be set multiple times-->
+	<Dependency Id="" />
+	<!--Required DLC, can be set multiple times. Supported values are "Landmark Buildings", "San Fransisco Set", "Beach Properties", "Urban Promenades", "Modern Architecture"-->
+	<RequiredDLC Value="" />
+	<!--Change log for new version. Single line or multi line. Supports minimal markdown subset-->
+	<ChangeLog>v1.8.23: The mod is now published publicly on PDX Mods.`r`nv1.8.22: Removes the periodic full rescan (47 ms each time and unnecessary once the tax base is cached), throttles the exemption-threshold rescan to once per second, and logs the demand recompute cost every minute so the last unmeasured cost can be judged.`r`nv1.8.21: Cuts steady-state overhead: the happiness injection recomputes from the cached tax base, the steady rescan moved from three to thirty seconds, and the demand UI binding is only pushed when its content changes.`r`nv1.8.20: Rate changes recompute from a cached tax base instead of rescanning the city, so dragging a tax slider no longer tanks the frame rate.`r`nv1.8.19: Store assets only: new cover, five screenshots, description in five languages.`r`nv1.8.18: Removes the 1.8.17 ceiling: the density surcharge is treated as an equal rise of the effective rate, using the vanilla formula and sensitivity with no cap.`r`nv1.8.16: The density surcharge is now levied per person. Each household member contributes max(0, own income - exemption threshold), matching the vanilla exemption and the per-person happiness calculation; previously a single exemption was subtracted per household, which overtaxed multi-earner households. Working members use their education-level wage, children and teens the family allowance, the elderly the pension and the rest the unemployment benefit. The steady forecast while paused now refreshes every three seconds instead of every second, because a pass is heavier.`r`nv1.8.15: The five density surcharges now affect the vanilla "Tax" happiness factor through the city's TaxHappiness modifier, bound to the density tax switch.`r`nv1.8.14: The Residential Minimum Earnings policy now only exempts: households below the threshold pay nothing and the mod no longer pays them a shortfall subsidy. The old behaviour could drain the treasury, because a threshold far above any household income turned the subsidy into "threshold times surtax rate" applied to the whole city. Negative density surcharge rates still pay out, since those are an explicit setting. The policy description is updated in all supported languages.`r`nv1.8.12-v1.8.13: The five density rows now show the density surcharge itself rather than base rate plus surcharge (a row could read 10% while the mod collected nothing). Unticking the Residential Minimum Earnings policy now means a threshold of 0 instead of silently keeping the vanilla balancing value. The policy state, the threshold write, the write verification and the all-zero case are logged.`r`nv1.8.11: Fixes double taxation. The per-density settlement charged the base residential rate on top of the density surcharge, but the vanilla tax system already collects the base rate from the same taxable income, so households paid the base rate twice and the city received it twice. Settlement and the welfare gate now use only the density surcharge; the row still displays base rate plus surcharge. Also restores the vanilla threshold when the city policy is switched off, makes forecast and settlement read the exemption threshold from a single source, verifies the threshold write once and logs the outcome, reinterprets saves written before 1.8.7 consistently (their density values are read as offsets from the base rate, which keeps the collected amounts identical and makes the displayed row rate equal to the household's combined rate), makes the taxation panel patch degrade per field instead of losing all six integrations at once, and defers the slider-triggered forecast to the next UI frame instead of running a 15 ms city-wide scan inside every slider event. Build and regression checks passed; in-game verification still required.`r`nv1.8.10: Adds native-language translations for all supported game languages and fixes the previous release metadata. Keeps the density tax panel patch, base-rate linkage and zero-surcharge handling.`r`nv1.8.8: Fixes the density tax panel patch signature so the five surcharge rows are restored. The 1.8.7 build could fail Harmony patch compilation and fall back to vanilla rows. Keeps base residential tax plus surcharge linkage, zero-surcharge handling and all-language localization.`r`n v1.8.7: Makes the five residential surcharge rows follow the native residential base tax rate. Changing the base residential rate now immediately updates surcharge row displays and estimates; changing a surcharge stores its offset from the base rate. Keeps the native policy icon and responsive estimate refresh.
+Earlier releases (v1.8.0-v1.8.5, v1.6.x and earlier): five residential demand categories with their own vacancies and surtaxes, native pre-construction selection, native-style UI, live per-density estimates, the zone-catalog performance fix and the expanded -1000%..+100% tax range.</ChangeLog>
+	<!--External link, can be set multiple times. supported types are "discord", "github", "youtube", "twitch", "x", "paypal", "patreon", "buymeacoffee", "kofi", "crowdin", "gitlab", "gofundme"-->
+	<ExternalLink Type="" Url="" />
+	<!--Supported values Public, Private, Unlisted-->
+	<AccessLevel Value="Public" />
+</Publish>

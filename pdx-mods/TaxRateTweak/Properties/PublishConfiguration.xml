@@ -8,293 +8,220 @@
 	<!--Long description of the mod. Single line or multi line. Supports minimal markdown subset-->
 	<LongDescription>
 日本語:
-標準の税制パネルに、低密度住宅、長屋住宅、中密度住宅、高密度住宅、低家賃住宅という5つの住宅密度別税率を追加し、それぞれに独自の住宅需要を持たせ、さらに非課税所得のしきい値を設定する都市ポリシーも加えます。
+
+住宅の5密度（低密度、長屋、中密度、高密度、低家賃）にそれぞれ税率と独自の住宅需要を設け、免税所得の基準額を定める都市政策も追加。
 
 追加されるもの
-- 標準の税制パネルの住宅部分に、密度ごとに1行ずつ、合計5行の追加税率行が加わります。
-- 行に表示されるのは、その密度の追加税率だけです。世帯の住宅税率の合計は、最上位の住宅税率にその行の税率を足したものになります。
-- 税率の上限が、標準の -10%..+30% から -1000%..+100% に拡大されます。マイナスの税率は世帯から徴収するのではなく、世帯に支払います。
-- 5つの住宅需要がそれぞれ別々に集計され、個別に評価され、個別に建設されます。
-- すべての金額は、世帯の財布と市の金庫の間で実際に移動する本物のお金で、その推定額は標準パネルに表示されます。
+- 税制パネルに密度別の5行を追加し、各行が独自の付加税率を表示。世帯の合計税率は基本税率とその行の合計。
+- 税率範囲は -10%..+30% から -1000%..+100% に拡大。マイナス税率は徴収せず世帯に支払う。
 
 仕組み
-- どの行がその世帯に適用されるかは、その建物が属するゾーン種別から読み取られます。判別できない住宅はそのままにされます。
-- ゲーム内の1日につき1回、世帯は次の額を負担します。課税基準 × その密度の追加税率 / 100。端数は切り捨てて整数にします。
-- 課税基準は世帯単位ではなく人数単位で数えます。各構成員について、その構成員自身の所得からしきい値を引き、0を超える部分だけを残します。
-- 個人所得は標準のルールに従います。働いている構成員は学歴に応じた賃金、子供とティーンエイジャーは家族手当、高齢者は年金、それ以外の全員は失業手当です。
-- しきい値を下回る所得は0として扱われるため、課税も支払いも行われません。
-- プラスの追加税率は世帯の財布から市の金庫へお金を移し、マイナスの場合は金庫から世帯へ支払います。お金は移動するだけで、新たに生み出されることはありません。徴収した額は住宅税収として、支払った額は住宅補助金として計上されます。
-- 標準の住宅基本税率はそのままです。同じ課税基準で動き続け、このMODはその上に追加税率を加えるだけです。
-- 各密度は自分の住宅だけを数えます。総戸数、空き戸数、そしてそのゾーン種別が解放されているかどうかです。需要は、標準の世帯需要の半分に空室率と標準の需要要因を足したものを 0-100 に収めた値で、その密度の追加税率が +1% 上がるごとに需要が1ポイント下がります。
-- 長屋住宅は中密度の要因モデルを、低家賃住宅は高密度の要因モデルを再利用するため、これらの組み合わせは自身の空室率、解放状態、追加税率だけが異なります。
-- 各密度はそれぞれ独立して建設されます。需要が0の密度が別の密度を妨げることはありません。道路、区画の広さ、地価、解放状況、建設候補、建設速度は標準のルールのままです。
-- 免税ポリシーにチェックを入れるとしきい値はスライダーの値になり、外すと0になって標準の非課税枠がなくなり、賃金のすべてが課税対象になります。これは同じ標準の非課税枠なので、基本税と追加税率の両方をまとめて免除し、免除するだけで支払いは行いません。スライダーの範囲は 0.01 から 50000、刻み 100、既定値 2000 です。
-- 追加税率は、標準の「税金」幸福度要因に、実効住宅税率が同じ分だけ上昇したものとして反映されます。計算式と感度は標準のままです。推定値は一時停止中も更新され、税率のドラッグにはキャッシュされた数値を使うため、フレームが止まることはありません。
+- 適用する行は建物のゾーン種別で決まり、未対応の住宅は変更なし。
+- 1ゲーム日ごと、世帯は課税基準額×密度税率 / 100を切り捨てた分を負担する。
+- 基準額は1人ごと。各人の所得から基準額を引き、0超の分のみ。所得は標準の賃金、手当、年金、給付の規則に従う。
+- 基準額以下は課税も支払いもなし。プラスは市の金庫へ、マイナスは市の金庫から。標準の住宅税はそのままで、付加分のみ追加。
+- 各密度が独自に住宅（戸数、空室、解放）を数える。需要は標準の世帯需要の半分に空室率と標準要素を足し、0-100に制限、税率+1%ごとに1ポイント減る。
+- 長屋は中密度、低家賃は高密度の需要要素を借用。各密度が独立して建設されるため、0の密度が他を妨げることはない。
+- 政策はオンでスライダー値、オフで0となり標準の免税枠が消え全賃金が課税対象。基本税と付加分をまとめて免除し支払いはしない。範囲0.01〜50000、既定2000。
+- 付加税は標準の「税」幸福度要素に実効税率の上昇分として等しく反映され、感度は標準のまま。ポーズ中も推定値は更新される。
 
 简体中文:
-在原版税收面板中新增五种住宅密度税率——低密度、联排住宅、中密度、高密度和廉租房——每种都配有自己的住房需求，另加一项可设置免税收入门槛的城市政策。
+
+五种住宅密度（低密度、联排住宅、中密度、高密度、廉租房）各配税率与住房需求，另加一项免税收入门槛的城市政策。
 
 新增内容
-- 在原版税收面板的住宅部分新增五行税率，每种密度各占一行。
-- 每一行只显示该密度的附加税率。一个家庭的住宅综合税率，等于顶部那行住宅税率加上它所在密度的那一行。
-- 税率范围从原版的 -10%..+30% 放宽到 -1000%..+100%。负税率不是向家庭收税，而是向家庭发放补贴。
-- 五项独立的住房需求数值，各自单独统计、评估和建造。
-- 每一笔金额都是家庭钱包与城市金库之间真实转移的资金，估算值会显示在原版面板中。
+- 在原版税收面板新增五行税率，每种密度一行，各显示附加税；家庭综合税率为顶部税率加本行税率。
+- 税率范围由 -10%..+30% 放宽至 -1000%..+100%；负税率向家庭发放补贴而非收税。
 
 工作原理
-- 一个家庭适用哪一行，取自它所在建筑的分区类型；无法识别的住房保持原样。
-- 每个游戏日结算一次，一个家庭应缴：应税基数 x 该密度的附加税率 / 100，并截断为整数。
-- 基数是按人计算，而不是按家庭：对每位成员，取其个人收入减去门槛，只保留大于零的部分。
-- 个人收入沿用原版规则：有工作的成员按其学历对应的工资计算，儿童和青少年算家庭补贴，老年人算养老金，其余人算失业救济金。
-- 低于门槛的收入按零计算，因此既不征税也不发放补贴。
-- 正附加税率把钱从家庭钱包转入城市金库，负附加税率则从金库向家庭发放。资金只是转移，绝不会凭空产生；征收的金额记作住宅税收收入，发放的金额记作住宅补贴。
-- 原版住宅基础税不受影响：它仍按同一基数运行，本模组只是在它之上叠加附加税率。
-- 每种密度只统计自己的住房：总户数、空置户数，以及该分区类型是否已解锁。需求 = 原版家庭需求的一半 + 空置率 + 原版需求因子，并限制在 0-100 之间；该密度附加税率每 +1%，其需求就降低一点。
-- 联排住宅沿用中密度的因子模型，廉租房沿用高密度的因子模型，因此这两对之间只在自己的空置率、解锁状态和附加税率上有所不同。
-- 每种密度各自独立建造；某一项需求为零绝不会阻碍另一项。道路、地块大小、地价、解锁、建筑候选和建造速度仍遵循原版规则。
-- 勾选免税政策时，门槛取滑块数值；取消勾选则为 0，这会移除原版的免税额度，使每一分工薪都变为应税。它就是原版的同一项免税额度，因此同时免除基础税和附加税，而且它只免税、从不发放补贴。滑块范围 0.01 到 50000，步长 100，默认 2000。
-- 附加税率会以有效住宅税率同等上升的方式，计入原版“税收”幸福度因子，公式和敏感度均沿用原版。暂停时估算值也会刷新，拖动税率时使用缓存数值，因此不会卡住画面。
+- 适用哪一行由建筑所属的分区类型决定；无法识别的住房不变。
+- 每个游戏日家庭应缴额为应税基数乘以密度税率，除以 100 后截断取整。
+- 基数按人计算：各成员的个人收入减去门槛，只取大于零的部分；收入沿用原版工资、津贴、养老金与救济金规则。
+- 低于门槛的部分既不征税也不发放；正税率缴入城市金库，负税率从金库支出。原版住宅基础税不变，模组只加附加税。
+- 每种密度只统计自身住房（户数、空置、解锁）；需求为原版家庭需求的一半加空置率加原版因子，限制在 0-100，再按税率每 +1% 降一点。
+- 联排住宅沿用中密度的需求因子，廉租房沿用高密度的；每种密度各自建造，一项为零不阻碍另一项。
+- 勾选政策时用滑块数值，取消则为 0，移除原版免税额使所有工资应税；同时免除基础税与附加税且从不发放。范围0.01到50000，默认2000。
+- 附加税以有效税率等量上升计入原版“税收”幸福度因子，敏感度同原版；暂停时估算也会刷新。
 
 繁體中文:
-在原生稅收面板中加入五種住宅密度稅率——低密度、排屋、中密度、高密度與低租金——每種都有各自的住房需求，另外還有一項可設定免稅收入門檻的城市政策。
+
+五種住宅密度稅率（低密度、排屋、中密度、高密度、廉租），各有住房需求，另有設定免稅收入門檻的城市政策。
 
 新增內容
-
-- 原生稅收面板的住宅部分多出五個稅率列，每種密度各一個。
-- 每個稅率列只顯示該密度的附加稅率。一個家戶的住宅稅率合計，等於住宅主稅率加上它所屬的那一列。
-- 稅率範圍從原版的 -10%..+30% 放寬到 -1000%..+100%。負稅率是退錢給家戶，而不是向他們收稅。
-- 五個各自獨立的住房需求數值，各自統計、各自評估、各自建造。
-- 每一筆金額都是在住戶錢包與城市金庫之間實際流動的錢，估算值也會顯示在原生面板上。
+- 稅收面板新增五列，每種密度一列，各顯示自身附加稅；住戶合併稅率為最高稅率加該列。
+- 稅率上下限由 -10%..+30% 放寬至 -1000%..+100%；負稅率改為向住戶付款。
 
 運作方式
-
-- 某個家戶適用哪一列，取決於其建築所屬的分區類型；無法判定的住宅維持不變。
-- 每個遊戲日結算一次，一個家戶應繳：應稅基數乘上該密度的附加稅率再除以 100，取整數後無條件捨去。
-- 基數是逐人計算，而不是逐戶：對每位成員取其個人收入減去門檻，只保留大於零的部分。
-- 個人收入依循原版規則：有工作的成員計入其教育程度對應的薪資，兒童與青少年計入家庭津貼，老年人計入退休金，其餘的人計入失業補助。
-- 低於門檻的收入以零計算，因此既不課稅也不退錢。
-- 正的附加稅率會把錢從住戶錢包移入城市金庫，負的附加稅率則從金庫撥錢給住戶。錢只會移動，不會無中生有；收取的金額記為住宅稅收，退還的金額記為住宅補貼。
-- 原版的住宅基礎稅不受影響：它仍依相同基數運作，本模組只是在其之上再加上附加稅率。
-- 每種密度只統計自己的住宅：總戶數、空置戶數，以及該分區類型是否已解鎖。需求等於原版家戶需求的一半加上空置率再加上原版需求因素，並限制在 0-100 之間；該密度的附加稅率每提高 +1%，其需求就下降一點。
-- 排屋沿用中密度的因素模型，低租金住宅沿用高密度的模型，因此這兩組的差異只在於各自的空置率、解鎖狀態與附加稅率。
-- 每種密度各自建造；其中一種停在零也不會阻擋另一種。道路、地塊大小、地價、解鎖、候選建築與建造速度仍依原版規則。
-- 勾選免稅政策時，門檻會設為滑桿的數值；取消勾選則變為 0，這會移除原版的免稅額，讓每一分薪資都應稅。它就是原版的那個免稅額，因此會同時免除基礎稅與附加稅，而且只免稅、不退錢。滑桿範圍 0.01 到 50000，間距 100，預設 2000。
-- 附加稅率會以住宅實質稅率等幅上升的方式，計入原版的「稅收」幸福度因素，並沿用原版公式與敏感度。暫停時估算值同樣會更新，拖動稅率時則使用快取的數值，因此不會卡住畫面。
+- 適用哪一列依建築所屬分區類型判定；無法辨識的住宅不受影響。
+- 每遊戲日住戶應繳：課稅基數乘密度稅率 / 100，無條件捨去。
+- 基數按人計：成員收入減門檻後取正值；收入依原版工資、津貼、退休金與福利。
+- 低於門檻不課不發；正稅率進市庫，負稅率由市庫支出。原版基本住宅稅不變，只加附加稅。
+- 每種密度自計住宅（戶數、空置、解鎖）；需求為原版住戶需求一半加空置率加原版因素，限制於 0-100，再減每 +1% 稅率一點。
+- 排屋沿用中密度需求因素，廉租沿用高密度；各密度獨立建造，一項為零不阻擋另一項。
+- 政策打勾用滑桿值，未打勾為 0，移除原版津貼使工資全數課稅；同時豁免基本稅與附加稅且不發款。範圍 0.01 至 50000，預設 2000。
+- 附加稅以有效稅率等幅上升計入原版「稅收」幸福度因素，敏感度同原版；暫停時亦更新估算。
 
 English:
-Five residential density tax rates — low density, row homes, medium, high and low-rent — added to the native taxation panel, each with its own housing demand, plus a city policy that sets a tax-free income threshold.
+
+Five residential density tax rates (low density, row homes, medium, high, low-rent), each with its own housing demand, plus a city policy that sets a tax-free income threshold.
 
 What it adds
-- Five extra rate rows in the residential part of the native taxation panel, one per density.
-- A row shows that density's surcharge only. A household's combined residential rate is the top residential rate plus its own row.
-- Rate limits widened from the vanilla -10%..+30% to -1000%..+100%. A negative rate pays households instead of charging them.
-- Five separate housing demand figures, each counted, evaluated and built on its own.
-- Every amount is real money moved between household wallets and the city treasury, and the estimate appears in the native panel.
+- Five rate rows in the native taxation panel, one per density, each showing its own surcharge; a household's combined rate is the top rate plus its row.
+- Rate limits widened from -10%..+30% to -1000%..+100%; a negative rate pays households instead of charging them.
 
 How it works
-- Which row applies to a household is read from its building's zone prefab; housing that cannot be identified is left untouched.
-- Once per game day a household owes: taxable basis x its density surcharge / 100, truncated to a whole number.
-- The basis is counted per person, not per household: for each member take that member's own income minus the threshold, and keep only the part above zero.
-- Personal income follows the vanilla rule: a working member counts their education level's wage, children and teens the family allowance, the elderly the pension, everyone else the unemployment benefit.
-- Income below the threshold counts as zero, so it is neither taxed nor paid out.
-- A positive surcharge moves money from household wallets into the city treasury, a negative one pays households out of the treasury. Money only moves, it is never created; collected amounts are booked as residential tax income, payouts as residential subsidy.
-- Your vanilla base residential tax is untouched: it keeps running from the same basis, and this mod only adds the surcharge on top of it.
-- Each density counts only its own housing: total units, vacant units and whether that zone type is unlocked. Demand = half the vanilla household demand + vacancy rate + the vanilla demand factors, clamped to 0-100, and +1% of that density's surcharge lowers its demand by one point.
-- Row homes reuse the medium-density factor model and low-rent housing the high-density one, so those pairs differ only by their own vacancy, unlock state and surcharge.
-- Each density builds on its own; one sitting at zero never blocks another. Roads, lot size, land value, unlocks, building candidates and construction speed stay vanilla rules.
-- The exemption policy ticked sets the threshold to the slider value, unticked it becomes 0, which removes the vanilla tax-free allowance so every unit of wage becomes taxable. It is that same vanilla allowance, so it exempts the base tax and the surcharge together, and it only exempts - it never pays out. Slider range 0.01 to 50000, step 100, default 2000.
-- Surcharges feed the vanilla "Tax" happiness factor as an equal rise of the effective residential rate, with the vanilla formula and sensitivity. Estimates refresh while paused too, and dragging a rate uses cached figures, so it does not stall the frame.
+- Which row applies is read from the building's zone type; unrecognised housing is untouched.
+- Per game day a household owes its taxable basis times its density rate, divided by 100 and truncated.
+- The basis is per person: each member's own income minus the threshold, keeping only what is above zero; income follows the vanilla wage, allowance, pension and benefit rules.
+- Below the threshold is neither taxed nor paid out; a positive rate pays into the treasury, a negative one out of it. The vanilla base residential tax is untouched, and the mod adds the surcharge only.
+- Each density counts its own housing (units, vacancies, unlock); demand is half the vanilla household demand plus vacancy rate plus the vanilla factors, clamped to 0-100, minus one point per +1% of its rate.
+- Row homes borrow the medium-density demand factors and low-rent the high-density ones; each density builds on its own, so one at zero never blocks another.
+- The policy ticked uses the slider value, unticked becomes 0, removing the vanilla allowance so all wages are taxable; it exempts base tax and surcharge together and never pays out. Range 0.01 to 50000, default 2000.
+- Surcharges feed the vanilla "Tax" happiness factor as an equal rise of the effective rate, with the vanilla sensitivity; estimates also refresh while paused.
 
 Deutsch:
-Fünf Steuersätze für Wohndichten — niedrige Dichte, Reihenhäuser, mittlere Dichte, hohe Dichte und Sozialwohnungen — kommen in den Steuerbereich des Spiels, jeweils mit eigener Wohnungsnachfrage, dazu eine Stadtpolitik, die einen Einkommensfreibetrag festlegt.
+
+Fünf Steuersätze für Wohndichten (niedrige Dichte, Reihenhäuser, mittlere, hohe, Sozialwohnungen), jeder mit eigener Wohnungsnachfrage, dazu eine Stadtpolitik, die einen Einkommensfreibetrag festlegt.
 
 Was es hinzufügt
-- Fünf zusätzliche Steuersatz-Zeilen im Wohnen-Abschnitt des Steuerbereichs, eine für jede Dichte.
-- Eine Zeile zeigt nur den Zuschlag dieser Dichte. Der kombinierte Wohntarif eines Haushalts ergibt sich aus dem obersten Wohntarif plus dem Wert seiner eigenen Zeile.
-- Die Satzgrenzen wurden von den Vanilla-Werten -10%..+30% auf -1000%..+100% erweitert. Ein negativer Satz zahlt an die Haushalte aus, statt sie zu belasten.
-- Fünf getrennte Wohnungsnachfrage-Werte, die jeweils eigenständig gezählt, bewertet und bebaut werden.
-- Jeder Betrag ist echtes Geld, das zwischen den Geldbeuteln der Haushalte und der Stadtkasse verschoben wird, und die Schätzung erscheint im Steuerbereich des Spiels.
+- Fünf Satzzeilen im Steuerbereich des Spiels, eine pro Dichte, jede mit eigenem Zuschlag; der kombinierte Wohntarif eines Haushalts ist der oberste Satz plus seine Zeile.
+- Satzgrenzen von -10%..+30% auf -1000%..+100% erweitert; ein negativer Satz zahlt an die Haushalte aus, statt sie zu belasten.
 
 So funktioniert es
-- Welche Zeile für einen Haushalt gilt, wird aus dem Zonentyp des Gebäudes gelesen; nicht identifizierbare Wohnungen bleiben unberührt.
-- Einmal pro Spieltag schuldet ein Haushalt: steuerpflichtige Bemessungsgrundlage x Zuschlag seiner Dichte / 100, abgeschnitten auf eine ganze Zahl.
-- Die Bemessungsgrundlage wird pro Person gezählt, nicht pro Haushalt: für jedes Mitglied nimmt man dessen eigenes Einkommen minus den Freibetrag und behält nur den Teil über null.
-- Das persönliche Einkommen folgt der Vanilla-Regel: Ein erwerbstätiges Mitglied zählt den Lohn seiner Bildungsstufe, Kinder und Jugendliche das Familiengeld, Senioren die Rente, alle anderen das Arbeitslosengeld.
-- Einkommen unterhalb des Freibetrags zählt als null, es wird also weder besteuert noch ausgezahlt.
-- Ein positiver Zuschlag verschiebt Geld von den Geldbeuteln der Haushalte in die Stadtkasse, ein negativer zahlt an die Haushalte aus der Stadtkasse aus. Geld wird nur verschoben, nie erzeugt; eingenommene Beträge werden als Wohnsteuer-Einnahmen verbucht, Auszahlungen als Wohn-Subvention.
-- Deine Vanilla-Wohnsteuer bleibt unberührt: Sie läuft weiter auf derselben Bemessungsgrundlage, und dieser Mod setzt nur den Zuschlag obendrauf.
-- Jede Dichte zählt nur ihre eigenen Wohnungen: Gesamtzahl der Einheiten, leerstehende Einheiten und ob dieser Zonentyp freigeschaltet ist. Die Nachfrage ergibt sich aus der halben Vanilla-Haushaltsnachfrage plus Leerstandsquote plus den Vanilla-Nachfragefaktoren, begrenzt auf 0-100, und je +1% Zuschlag dieser Dichte sinkt ihre Nachfrage um einen Punkt.
-- Reihenhäuser übernehmen das Faktormodell der mittleren Dichte und Sozialwohnungen das der hohen Dichte, daher unterscheiden sich diese Paare nur durch ihren eigenen Leerstand, ihren Freischaltungszustand und ihren Zuschlag.
-- Jede Dichte baut für sich allein; eine bei null blockiert niemals eine andere. Straßen, Grundstücksgröße, Grundstückswert, Freischaltungen, Gebäudekandidaten und Baugeschwindigkeit bleiben Vanilla-Regeln.
-- Ist die Freibetrags-Politik aktiviert, entspricht der Freibetrag dem Wert des Reglers; ist sie deaktiviert, wird er 0, wodurch der Steuerfreibetrag des Spiels entfällt und jeder Lohnanteil steuerpflichtig wird. Es ist derselbe Freibetrag wie im Spiel, er befreit also die Grundsteuer und den Zuschlag gemeinsam, und er befreit nur - er zahlt nie aus. Reglerbereich 0.01 bis 50000, Schrittweite 100, Standardwert 2000.
-- Zuschläge fließen in den Vanilla-Zufriedenheitsfaktor „Steuern" ein, und zwar als entsprechender Anstieg des effektiven Wohntarifs, mit der Vanilla-Formel und ihrer Empfindlichkeit. Die Schätzungen aktualisieren sich auch im Pausenzustand, und beim Ziehen eines Satzes werden zwischengespeicherte Werte verwendet, sodass das Bild nicht stockt.
+- Welche Zeile gilt, wird aus dem Zonentyp des Gebäudes gelesen; nicht identifizierbare Wohnungen bleiben unberührt.
+- Pro Spieltag schuldet ein Haushalt seine steuerpflichtige Bemessungsgrundlage mal seinen Dichtsatz, geteilt durch 100 und abgeschnitten.
+- Die Bemessungsgrundlage ist pro Person: eigenes Einkommen jedes Mitglieds minus Freibetrag, nur der Teil über null; Einkommen folgt den Vanilla-Regeln für Lohn, Familiengeld, Rente und Arbeitslosengeld.
+- Unter dem Freibetrag wird weder besteuert noch ausgezahlt; ein positiver Satz zahlt in die Stadtkasse, ein negativer aus ihr. Die Vanilla-Wohnsteuer bleibt unberührt, der Mod setzt nur den Zuschlag obendrauf.
+- Jede Dichte zählt ihre eigenen Wohnungen (Einheiten, Leerstand, Freischaltung); die Nachfrage ist die halbe Vanilla-Haushaltsnachfrage plus Leerstandsquote plus die Vanilla-Faktoren, begrenzt auf 0-100, minus einen Punkt je +1% ihres Satzes.
+- Reihenhäuser übernehmen die Nachfragefaktoren der mittleren Dichte, Sozialwohnungen die der hohen; jede Dichte baut für sich, eine bei null blockiert nie eine andere.
+- Die Richtlinie nutzt angehakt den Reglerwert, unangehakt wird 0, wodurch der Freibetrag des Spiels entfällt und alle Löhne steuerpflichtig werden; sie befreit Grundsteuer und Zuschlag gemeinsam und zahlt nie aus. Bereich 0.01 bis 50000, Standard 2000.
+- Zuschläge fließen als entsprechender Anstieg des effektiven Wohntarifs in den Vanilla-Zufriedenheitsfaktor „Steuern" ein, mit der Vanilla-Empfindlichkeit; Schätzungen aktualisieren sich auch im Pausenzustand.
 
 Français:
-Cinq taux d'imposition sur la densité résidentielle — faible densité, maisons en rangée, moyenne, haute et logements à loyer modéré — sont ajoutés au panneau des impôts d'origine, chacun avec sa propre demande de logements, plus une politique municipale qui fixe un seuil de revenu exonéré d'impôt.
 
-Ce qu'il ajoute
-- Cinq lignes de taux supplémentaires dans la partie résidentielle du panneau des impôts d'origine, une par densité.
-- Une ligne affiche uniquement la surtaxe de cette densité. Le taux résidentiel combiné d'un ménage est le taux résidentiel du haut plus celui de sa propre ligne.
-- Les limites de taux passent des -10%..+30% d'origine à -1000%..+100%. Un taux négatif verse de l'argent aux ménages au lieu de les taxer.
-- Cinq chiffres de demande de logements distincts, chacun compté, évalué et construit de façon indépendante.
-- Chaque montant est de l'argent réel déplacé entre les portefeuilles des ménages et le trésor de la ville, et l'estimation apparaît dans le panneau d'origine.
+Cinq taux d'imposition par densité résidentielle (faible densité, maisons en rangée, moyenne, forte, loyers modérés), chacun avec sa demande de logements, plus une politique municipale fixant un seuil de revenu exonéré.
 
-Comment ça marche
-- La ligne qui s'applique à un ménage est déterminée par le type de zone de son bâtiment ; les logements impossibles à identifier ne sont pas modifiés.
-- Une fois par jour de jeu, un ménage doit : base imposable x surtaxe de sa densité / 100, tronqué à un nombre entier.
-- La base est calculée par personne, et non par ménage : pour chaque membre, on prend son propre revenu moins le seuil, et on ne garde que la part supérieure à zéro.
-- Le revenu personnel suit la règle d'origine : un membre actif compte le salaire de son niveau d'éducation, les enfants et les adolescents les allocations familiales, les personnes âgées la pension de retraite, et tous les autres l'allocation chômage.
-- Un revenu inférieur au seuil compte pour zéro : il n'est donc ni imposé ni versé.
-- Une surtaxe positive transfère de l'argent des portefeuilles des ménages vers le trésor de la ville, une surtaxe négative verse de l'argent aux ménages depuis le trésor. L'argent ne fait que circuler, il n'est jamais créé ; les montants perçus sont comptabilisés comme revenus d'impôts résidentiels, et les versements comme subventions résidentielles.
-- Votre taxe résidentielle de base d'origine n'est pas modifiée : elle continue de s'appliquer à la même base, et ce mod ne fait qu'ajouter la surtaxe par-dessus.
-- Chaque densité ne compte que ses propres logements : nombre total d'unités, unités vacantes et déblocage de ce type de zone. Demande = la moitié de la demande de logements d'origine + le taux de vacance + les facteurs de demande d'origine, limités à 0-100, et +1% de surtaxe de cette densité réduit sa demande d'un point.
-- Les maisons en rangée réutilisent le modèle de facteurs de la densité moyenne, et les logements à loyer modéré celui de la haute densité : ces paires ne diffèrent donc que par leur propre vacance, leur état de déblocage et leur surtaxe.
-- Chaque densité construit de son côté ; une densité à zéro ne bloque jamais une autre. Routes, taille de la parcelle, valeur foncière, déblocages, bâtiments candidats et vitesse de construction restent des règles d'origine.
-- La politique d'exonération, une fois cochée, fixe le seuil à la valeur du curseur ; décochée, il passe à 0, ce qui supprime l'abattement d'origine et rend imposable chaque unité de salaire. C'est ce même abattement, il exonère donc à la fois la taxe de base et la surtaxe, et il ne fait qu'exonérer : il ne verse jamais rien. Plage du curseur de 0.01 à 50000, pas de 100, valeur par défaut 2000.
-- Les surtaxes alimentent le facteur de bonheur « Impôts » d'origine comme une hausse équivalente du taux résidentiel effectif, avec la formule et la sensibilité d'origine. Les estimations se rafraîchissent même en pause, et le déplacement d'un taux utilise des chiffres mis en cache, ce qui ne bloque pas l'image.
+Ce que cela ajoute
+- Cinq lignes de taux dans le panneau de fiscalité d'origine, une par densité, chacune avec sa surtaxe ; le taux combiné d'un ménage est le taux principal plus celui de sa ligne.
+- Les limites passent de -10%..+30% à -1000%..+100% ; un taux négatif verse de l'argent aux ménages au lieu de les taxer.
+
+Comment cela fonctionne
+- La ligne applicable se lit sur le type de zonage du bâtiment ; les logements non reconnus sont intacts.
+- Par jour de jeu, un ménage doit sa base imposable multipliée par son taux, divisée par 100 et tronquée.
+- La base est individuelle : le revenu de chaque membre moins le seuil, en gardant seulement le positif ; les revenus suivent les règles d'origine des salaires, allocations, pensions et prestations.
+- Sous le seuil, rien n'est taxé ni versé ; un taux positif alimente la trésorerie municipale, un négatif la vide. L'impôt résidentiel de base d'origine reste intact et le mod n'ajoute que la surtaxe.
+- Chaque densité compte ses logements (unités, logements vacants, déblocage) ; la demande vaut la moitié de la demande de ménages d'origine plus le taux de vacance plus les facteurs d'origine, bornée à 0-100, moins un point par +1% de son taux.
+- Les maisons en rangée empruntent les facteurs de demande de la densité moyenne, et les loyers modérés ceux de la forte ; chaque densité construit de son côté, donc une à zéro ne bloque jamais les autres.
+- La politique cochée utilise la valeur du curseur, décochée elle vaut 0, supprimant l'abattement d'origine et rendant tous les salaires imposables ; elle exonère ensemble l'impôt de base et la surtaxe et ne verse jamais rien. Intervalle de 0.01 à 50000, défaut 2000.
+- Les surtaxes alimentent le facteur de bonheur « Impôts » d'origine comme une hausse équivalente du taux effectif, avec la sensibilité d'origine ; les estimations se rafraîchissent aussi en pause.
 
 Italiano:
-Cinque aliquote fiscali per la densità residenziale — bassa densità, case a schiera, media, alta ed edilizia popolare — aggiunte al pannello fiscale nativo, ciascuna con la propria domanda abitativa, più una politica cittadina che fissa una soglia di reddito esente da imposta.
+
+Cinque aliquote per la tassa residenziale secondo la densità (bassa, case a schiera, media, alta, affitto agevolato), ciascuna con la propria domanda abitativa, più una politica cittadina che fissa una soglia di reddito esente.
 
 Cosa aggiunge
-- Cinque righe di aliquota in più nella sezione residenziale del pannello fiscale nativo, una per densità.
-- Ogni riga mostra solo l'addizionale di quella densità. L'aliquota residenziale complessiva di una famiglia è l'aliquota residenziale principale più la propria riga.
-- I limiti delle aliquote sono stati ampliati dal -10%..+30% originale a -1000%..+100%. Un'aliquota negativa paga le famiglie invece di tassarle.
-- Cinque valori distinti di domanda abitativa, ciascuno conteggiato, valutato e costruito in modo indipendente.
-- Ogni importo è denaro reale spostato tra i portafogli delle famiglie e la tesoreria cittadina, e la stima compare nel pannello nativo.
+- Cinque righe di aliquota nel pannello fiscale nativo, una per densità, ciascuna con la propria sovrattassa; l'aliquota complessiva di un nucleo è quella principale più quella della sua riga.
+- Limiti ampliati da -10%..+30% a -1000%..+100%; un'aliquota negativa paga i nuclei invece di tassarli.
 
 Come funziona
-- La riga applicata a una famiglia si ricava dal tipo di zona dell'edificio in cui vive; gli alloggi che non è possibile identificare restano invariati.
-- Una volta per giorno di gioco una famiglia deve pagare: base imponibile x l'addizionale della sua densità / 100, troncato a un numero intero.
-- La base è conteggiata per persona, non per famiglia: per ogni membro si prende il suo reddito meno la soglia, e si tiene solo la parte che supera lo zero.
-- Il reddito personale segue la regola originale: un membro che lavora conta il salario del suo livello di istruzione, i bambini e gli adolescenti l'assegno familiare, gli anziani la pensione, tutti gli altri l'indennità di disoccupazione.
-- Un reddito inferiore alla soglia conta come zero, quindi non viene né tassato né pagato.
-- Un'addizionale positiva sposta denaro dai portafogli delle famiglie alla tesoreria cittadina, una negativa paga le famiglie attingendo dalla tesoreria. Il denaro si sposta soltanto, non viene mai creato; gli importi riscossi sono registrati come entrate da imposte residenziali, i pagamenti come sovvenzione residenziale.
-- L'imposta residenziale di base originale non viene toccata: continua a funzionare sulla stessa base, e questa mod vi aggiunge solo l'addizionale.
-- Ogni densità conta solo i propri alloggi: unità totali, unità sfitte e se quel tipo di zona è sbloccato. Domanda = metà della domanda abitativa originale + tasso di sfitto + i fattori di domanda originali, limitata a 0-100, e +1% dell'addizionale di quella densità riduce la sua domanda di un punto.
-- Le case a schiera riutilizzano il modello di fattori della media densità e l'edilizia popolare quello dell'alta densità, quindi queste coppie differiscono solo per il proprio tasso di sfitto, lo stato di sblocco e l'addizionale.
-- Ogni densità costruisce per conto proprio; una ferma a zero non blocca mai le altre. Strade, dimensione del lotto, valore del terreno, sblocchi, edifici candidati e velocità di costruzione restano regole originali.
-- La politica di esenzione, se selezionata, imposta la soglia al valore del cursore; se deselezionata diventa 0, il che rimuove la franchigia esente da imposta originale così ogni unità di salario diventa imponibile. È quella stessa franchigia originale, quindi esenta insieme l'imposta di base e l'addizionale, e si limita a esentare: non paga mai nulla. Intervallo del cursore da 0.01 a 50000, passo 100, predefinito 2000.
-- Le addizionali alimentano il fattore di felicità originale "Imposte" come un aumento equivalente dell'aliquota residenziale effettiva, con la formula e la sensibilità originali. Le stime si aggiornano anche in pausa, e trascinare un'aliquota usa cifre memorizzate, quindi non blocca il frame.
+- La riga da applicare si legge dal tipo di zona dell'edificio; gli alloggi non riconosciuti restano invariati.
+- Ogni giorno di gioco un nucleo deve la sua base imponibile moltiplicata per l'aliquota della sua densità, divisa per 100 e troncata.
+- La base è per persona: il reddito di ogni membro meno la soglia, tenendo solo ciò che supera zero; il reddito segue le regole vanilla di salario, indennità, pensione e sussidio.
+- Sotto la soglia non si tassa né si paga; un'aliquota positiva versa alla tesoreria cittadina, una negativa la preleva. L'imposta residenziale base vanilla resta invariata e la mod aggiunge solo la sovrattassa.
+- Ogni densità conta i propri alloggi (unità, sfitti, sblocco); la domanda è metà di quella abitativa vanilla più il tasso di sfitto più i fattori vanilla, limitata a 0-100, meno un punto per ogni +1% della sua aliquota.
+- Le case a schiera prendono i fattori di domanda della media densità e l'affitto agevolato quelli dell'alta; ogni densità costruisce per conto suo, quindi una a zero non blocca mai le altre.
+- La politica spuntata usa il valore del cursore, non spuntata diventa 0, eliminando l'esenzione vanilla così tutti i salari sono tassabili; esenta insieme imposta di base e sovrattassa e non paga mai. Intervallo da 0.01 a 50000, predefinito 2000.
+- Le sovrattasse alimentano il fattore di felicità vanilla delle imposte come aumento pari dell'aliquota effettiva, con la sensibilità vanilla; le stime si aggiornano anche in pausa.
 
 Español:
-Cinco tipos de gravamen de densidad residencial —baja densidad, viviendas adosadas, media, alta y alquiler bajo— añadidos al panel de impuestos nativo, cada uno con su propia demanda de vivienda, más una política municipal que fija un umbral de ingresos exento de impuestos.
 
-Qué añade
-- Cinco filas de tipo adicionales en la parte residencial del panel de impuestos nativo, una por densidad.
-- Una fila muestra solo el recargo de esa densidad. El tipo residencial combinado de un hogar es el tipo residencial superior más su propia fila.
-- Límites de tipo ampliados del -10%..+30% original a -1000%..+100%. Un tipo negativo paga a los hogares en lugar de cobrarles.
-- Cinco cifras de demanda de vivienda independientes, cada una contada, evaluada y construida por su cuenta.
-- Cada importe es dinero real que se mueve entre los monederos de los hogares y el tesoro de la ciudad, y la estimación aparece en el panel nativo.
+Cinco tipos de impuesto según la densidad residencial (baja densidad, casas adosadas, media, alta, alquiler bajo), cada uno con su propia demanda de vivienda, más una política que fija un umbral de ingresos exentos.
+
+Lo que añade
+- Cinco filas de tipo en el panel de impuestos nativo, una por densidad, cada una con su propio recargo; el tipo combinado de un hogar es el superior más su fila.
+- Límites de tipo ampliados de -10%..+30% a -1000%..+100%; un tipo negativo les paga en lugar de cobrarles.
 
 Cómo funciona
-- Qué fila se aplica a un hogar se lee del prefab de zona de su edificio; la vivienda que no se puede identificar se deja intacta.
-- Una vez por día de juego, un hogar debe: base imponible x su recargo de densidad / 100, truncado a un número entero.
-- La base se cuenta por persona, no por hogar: para cada miembro se toma su propio ingreso menos el umbral, y se conserva solo la parte por encima de cero.
-- Los ingresos personales siguen la regla original: un miembro que trabaja cuenta el salario de su nivel educativo, los niños y adolescentes la asignación familiar, los mayores la pensión, y todos los demás el subsidio de desempleo.
-- Los ingresos por debajo del umbral cuentan como cero, así que ni se gravan ni se pagan.
-- Un recargo positivo mueve dinero de los monederos de los hogares al tesoro de la ciudad; uno negativo paga a los hogares desde el tesoro. El dinero solo se mueve, nunca se crea; los importes recaudados se contabilizan como ingresos por impuestos residenciales y los pagos como subvención residencial.
-- Tu impuesto residencial base original queda intacto: sigue funcionando desde la misma base, y este mod solo añade el recargo encima.
-- Cada densidad cuenta solo su propia vivienda: unidades totales, unidades vacías y si ese tipo de zona está desbloqueado. Demanda = la mitad de la demanda de hogares original + tasa de vacancia + los factores de demanda originales, limitada a 0-100, y +1% de recargo de esa densidad reduce su demanda en un punto.
-- Las viviendas adosadas reutilizan el modelo de factores de densidad media y las de alquiler bajo el de densidad alta, así que esos pares solo se diferencian por su propia vacancia, estado de desbloqueo y recargo.
-- Cada densidad construye por su cuenta; una que se quede en cero nunca bloquea a otra. Carreteras, tamaño de la parcela, valor del suelo, desbloqueos, candidatos de edificios y velocidad de construcción siguen las reglas originales.
-- La política de exención marcada fija el umbral al valor del control deslizante; sin marcar pasa a 0, lo que elimina la asignación libre de impuestos original para que cada unidad de salario pase a ser gravable. Es esa misma asignación original, así que exime juntos el impuesto base y el recargo, y solo exime: nunca paga. Rango del control deslizante de 0.01 a 50000, paso 100, predeterminado 2000.
-- Los recargos alimentan el factor de felicidad "Impuestos" original como una subida equivalente del tipo residencial efectivo, con la fórmula y la sensibilidad originales. Las estimaciones se actualizan también con el juego en pausa, y arrastrar un tipo usa cifras en caché, así que no bloquea el fotograma.
+- La fila aplicable se lee del tipo de zona del edificio; la vivienda no reconocida no se toca.
+- Por día de juego un hogar debe su base imponible por su tipo de densidad / 100, truncada.
+- La base es por persona: los ingresos de cada miembro menos el umbral, conservando solo lo que supere cero; los ingresos siguen las reglas originales de salario, exención, pensión y prestaciones.
+- Por debajo del umbral no se cobra ni se paga; un tipo positivo paga al tesoro de la ciudad, uno negativo lo saca de él. El impuesto residencial base original no se toca y el mod solo añade el recargo.
+- Cada densidad cuenta su propia vivienda (unidades, vacantes, desbloqueo); la demanda es la mitad de la demanda de hogares original más la tasa de vacancia más los factores originales, limitada a 0-100, menos un punto por cada +1% de su tipo.
+- Las casas adosadas toman los factores de demanda de la densidad media y el alquiler bajo los de la alta; cada densidad construye por su cuenta, así que una a cero nunca bloquea a otra.
+- La política marcada usa el valor del deslizador, sin marcar pasa a 0, eliminando la exención original para que todos los salarios sean gravables; exime el impuesto base y el recargo juntos y nunca paga. Rango 0.01 a 50000, predeterminado 2000.
+- Los recargos alimentan el factor de felicidad "Tax" original como una subida igual del tipo efectivo, con la sensibilidad original; las estimaciones también se actualizan en pausa.
 
 Português (Brasil):
-Cinco alíquotas de imposto residencial por densidade — baixa densidade, moradias em fileira, média, alta e aluguel baixo — adicionadas ao painel de impostos original, cada uma com a sua própria demanda por moradia, além de uma política municipal que define um limite de renda isento de imposto.
+
+Cinco alíquotas de imposto residencial por densidade (baixa, fileira, média, alta e aluguel baixo), cada uma com a sua própria demanda por moradia, mais uma política municipal com limite de renda isento de imposto.
 
 O que ele adiciona
-- Cinco linhas de alíquota extras na parte residencial do painel de impostos original, uma para cada densidade.
-- Uma linha mostra apenas o acréscimo daquela densidade. A alíquota residencial combinada de um domicílio é a alíquota residencial principal mais a sua própria linha.
-- Os limites de alíquota foram ampliados do original -10%..+30% para -1000%..+100%. Uma alíquota negativa paga aos domicílios em vez de cobrá-los.
-- Cinco números separados de demanda por moradia, cada um contado, avaliado e construído de forma independente.
-- Todo valor é dinheiro real movido entre as carteiras dos domicílios e o cofre da cidade, e a estimativa aparece no painel original.
+- Cinco linhas de alíquota no painel de impostos original, uma por densidade, cada uma com o seu acréscimo; a alíquota combinada de um domicílio é a principal mais a da sua linha.
+- Limites de alíquota ampliados de -10%..+30% para -1000%..+100%; uma alíquota negativa paga aos domicílios em vez de cobrá-los.
 
 Como funciona
-- Qual linha se aplica a um domicílio é lido a partir do tipo de zoneamento do seu prédio; moradias que não podem ser identificadas ficam intocadas.
-- Uma vez por dia de jogo, um domicílio deve: base tributável x o acréscimo da sua densidade / 100, truncado para um número inteiro.
-- A base é contada por pessoa, não por domicílio: para cada membro, pegue a renda própria daquele membro menos o limite, e mantenha apenas a parte acima de zero.
-- A renda pessoal segue a regra original: um membro que trabalha conta o salário do seu nível de escolaridade, crianças e adolescentes o abono familiar, os idosos a aposentadoria, e todos os outros o auxílio-desemprego.
-- Renda abaixo do limite conta como zero, então não é tributada nem paga.
-- Um acréscimo positivo move dinheiro das carteiras dos domicílios para o cofre da cidade; um negativo paga os domicílios a partir do cofre. O dinheiro apenas se move, nunca é criado; os valores arrecadados são registrados como receita de imposto residencial, e os pagamentos como subsídio residencial.
-- Seu imposto residencial base original fica intocado: ele continua sendo calculado sobre a mesma base, e este mod apenas adiciona o acréscimo por cima dele.
-- Cada densidade conta apenas as suas próprias moradias: total de unidades, unidades vagas e se aquele tipo de zona está desbloqueado. Demanda = metade da demanda original por domicílios + taxa de vacância + os fatores de demanda originais, limitada a 0-100, e +1% do acréscimo daquela densidade reduz a sua demanda em um ponto.
-- As moradias em fileira reutilizam o modelo de fatores da média densidade e as moradias de aluguel baixo o da alta densidade, então esses pares diferem apenas pela sua própria vacância, estado de desbloqueio e acréscimo.
-- Cada densidade constrói por conta própria; uma que esteja em zero nunca bloqueia outra. Estradas, tamanho do lote, valor da terra, desbloqueios, candidatos a prédio e velocidade de construção continuam sendo regras originais.
-- A política de isenção marcada define o limite para o valor do controle deslizante; desmarcada, ele se torna 0, o que remove a isenção fiscal original e faz com que cada unidade de salário se torne tributável. É essa mesma isenção original, então ela isenta o imposto base e o acréscimo juntos, e ela apenas isenta - nunca paga. Faixa do controle deslizante de 0.01 a 50000, passo 100, padrão 2000.
-- Os acréscimos alimentam o fator de felicidade "Impostos" original como um aumento equivalente da alíquota residencial efetiva, com a fórmula e a sensibilidade originais. As estimativas também são atualizadas enquanto o jogo está pausado, e arrastar uma alíquota usa valores em cache, então isso não trava o quadro.
+- Qual linha se aplica é lido do tipo de zoneamento do prédio; moradias não reconhecidas ficam intocadas.
+- Por dia de jogo, um domicílio deve a sua base tributável x a alíquota da densidade / 100, truncado.
+- A base é por pessoa: a renda própria de cada membro menos o limite, mantendo só o que fica acima de zero; a renda segue as regras originais de salário, abono, aposentadoria e benefícios.
+- Abaixo do limite não há imposto nem pagamento; uma alíquota positiva paga ao cofre da cidade, uma negativa paga dele. O imposto residencial base original fica intocado, e o mod só adiciona o acréscimo.
+- Cada densidade conta suas próprias moradias (unidades, vagas, desbloqueio); a demanda é metade da demanda original por domicílios, mais a taxa de vacância e os fatores originais, limitada a 0-100, menos um ponto por +1% da alíquota.
+- Moradias em fileira usam os fatores da média densidade e as de aluguel baixo os da alta densidade; cada densidade constrói por conta própria, então uma em zero nunca bloqueia outra.
+- A política marcada usa o valor do controle deslizante, desmarcada vira 0, removendo o abono original e tornando todos os salários tributáveis; ela isenta imposto base e acréscimo juntos e nunca paga. Faixa de 0.01 a 50000, padrão 2000.
+- Os acréscimos alimentam o fator de felicidade Impostos original como aumento igual da alíquota efetiva, com a sensibilidade original; as estimativas também se atualizam com o jogo pausado.
 
 한국어:
-기존 세금 패널에 저밀도, 연립 주택, 중밀도, 고밀도, 저임대 주택의 다섯 가지 주거 밀도별 세율을 추가하고, 각 세율에 자체 주택 수요를 부여하며, 면세 소득 기준선을 설정하는 도시 정책도 함께 추가합니다.
+
+주거 밀도별 세율 5종(저밀도, 연립 주택, 중밀도, 고밀도, 저렴 주택)에 밀도별 주택 수요를 붙이고, 면세 소득 기준선을 정하는 도시 정책을 추가합니다.
+
 추가되는 내용
-- 기존 세금 패널의 주거 부분에 밀도별로 하나씩, 다섯 개의 추가 세율 행이 생깁니다.
-- 각 행에는 해당 밀도의 할증 세율만 표시됩니다. 가구에 적용되는 주거 세율은 패널 상단의 주거 세율에 해당 가구가 속한 행의 세율을 더한 값입니다.
-- 세율 한도가 기본값 -10%..+30%에서 -1000%..+100%로 넓어집니다. 음수 세율은 가구에 세금을 부과하는 대신 가구에 지급합니다.
-- 다섯 가지 주택 수요 수치가 각각 별도로 집계되고, 평가되고, 건설됩니다.
-- 모든 금액은 가구의 지갑과 도시 금고 사이에서 실제로 이동하는 돈이며, 예상치는 기존 패널에 표시됩니다.
+- 기본 세금 패널에 밀도별 세율 행 5개가 생기며, 각 행은 자체 할증률을 표시합니다. 가구 합산 세율은 최고 세율에 그 행 세율을 더한 값입니다.
+- 세율 한도를 -10%..+30%에서 -1000%..+100%로 넓혔습니다. 음수 세율은 가구에 세금을 매기는 대신 지급합니다.
 
 작동 방식
-- 가구에 어떤 행이 적용되는지는 그 건물의 구역 유형에서 읽어냅니다. 식별할 수 없는 주택은 그대로 둡니다.
-- 게임 내 하루에 한 번, 가구가 낼 금액은 과세 기준 x 해당 밀도 할증료 / 100이며, 정수로 버림 처리됩니다.
-- 과세 기준은 가구가 아니라 사람별로 계산합니다. 각 구성원마다 그 구성원의 소득에서 기준선을 뺀 뒤 0을 넘는 부분만 반영합니다.
-- 개인 소득은 기본 규칙을 따릅니다. 일하는 구성원은 학력에 따른 임금, 어린이와 청소년은 가족 수당, 노인은 연금, 그 밖의 모든 사람은 실업 수당으로 계산됩니다.
-- 기준선보다 낮은 소득은 0으로 간주되므로, 세금도 부과되지 않고 지급도 되지 않습니다.
-- 양수 할증료는 가구의 지갑에서 도시 금고로 돈을 옮기고, 음수 할증료는 도시 금고에서 가구에 지급합니다. 돈은 이동만 할 뿐 새로 생기지 않으며, 징수한 금액은 주거 세수로, 지급한 금액은 주거 보조금으로 기록됩니다.
-- 기본 주거 세금은 그대로입니다. 같은 과세 기준으로 계속 부과되며, 이 모드는 그 위에 할증료만 더합니다.
-- 각 밀도는 자기 주택만 집계합니다. 전체 세대 수, 빈 세대 수, 그리고 해당 구역 유형의 해금 여부입니다. 수요 = 기본 가구 수요의 절반 + 공실률 + 기본 수요 요인이고, 0-100으로 제한되며, 해당 밀도 할증료가 +1% 오를 때마다 그 수요가 1포인트 낮아집니다.
-- 연립 주택은 중밀도 요인 모델을, 저임대 주택은 고밀도 요인 모델을 그대로 사용하므로, 이 두 짝은 각자의 공실률, 해금 상태, 할증료에서만 차이가 납니다.
-- 각 밀도는 따로 건설됩니다. 하나가 0에 머물러도 다른 밀도를 막지 않습니다. 도로, 대지 크기, 지가, 해금, 건물 후보, 건설 속도는 기본 규칙을 따릅니다.
-- 면세 정책을 체크하면 기준선이 슬라이더 값으로 설정되고, 체크를 풀면 0이 되어 기본 면세 공제가 사라지므로 모든 임금이 과세 대상이 됩니다. 같은 기본 공제이므로 기본 세금과 할증료를 함께 면세해 주며, 면세만 할 뿐 지급은 하지 않습니다. 슬라이더 범위는 0.01부터 50000까지, 단계 100, 기본값 2000입니다.
-- 할증료는 실효 주거 세율이 그만큼 오른 것으로 계산되어 기본 "세금" 행복도 요인에 반영되며, 기본 공식과 민감도를 그대로 따릅니다. 예상치는 일시정지 중에도 갱신되고, 세율을 드래그할 때는 캐시된 수치를 사용하므로 프레임이 멈추지 않습니다.
+- 어떤 행이 적용될지는 건물이 속한 구역 유형에서 읽습니다. 인식되지 않는 주거지는 그대로 둡니다.
+- 게임 하루마다 가구는 과세 기준액에 밀도 세율을 곱해 100으로 나누고 버린 만큼을 냅니다.
+- 기준액은 1인당입니다. 구성원 각자의 소득에서 기준선을 뺀 값 중 0보다 큰 부분만 남기며, 소득은 기본 게임의 임금, 수당, 연금, 복지 규칙을 따릅니다.
+- 기준선 미만은 세금도 지급도 없습니다. 양수 세율은 도시 금고로 들어가고 음수는 금고에서 나옵니다. 기본 주거 세금은 그대로이며 할증분만 더합니다.
+- 각 밀도는 자체 주택(세대, 공실, 해금)을 셉니다. 수요는 기본 가구 수요의 절반에 공실률과 기본 요인을 더해 0-100으로 제한한 뒤 세율 +1%마다 1포인트를 뺀 값입니다.
+- 연립 주택은 중밀도 수요 요인을, 저렴 주택은 고밀도 요인을 가져옵니다. 각 밀도는 따로 지어져 하나가 0이어도 다른 하나를 막지 않습니다.
+- 정책을 켜면 슬라이더 값이, 끄면 0이 되어 기본 수당이 사라지고 모든 임금이 과세됩니다. 기본 세금과 할증을 함께 면제하며 지급은 없습니다. 범위 0.01부터 50000까지, 기본값 2000.
+- 할증은 기본 "세금" 행복도 요인에 유효 세율 상승분만큼 똑같이 반영되며 기본 민감도를 따릅니다. 예상치는 일시정지 중에도 갱신됩니다.
 
 Polski:
-Pięć stawek podatku dla gęstości zabudowy mieszkaniowej — niska gęstość, domy szeregowe, średnia, wysoka i budownictwo o niskim czynszu — dodanych do natywnego panelu podatków, każda z własnym popytem na mieszkania, plus polityka miejska ustawiająca próg dochodu wolnego od podatku.
+
+Pięć stawek podatku dla mieszkalnictwa o różnej gęstości (niska, szeregowa, średnia, wysoka, tania), każda z własnym popytem na mieszkania, plus polityka miasta ustalająca próg dochodu wolnego od podatku.
 
 Co dodaje
-- Pięć dodatkowych wierszy stawek w części mieszkaniowej natywnego panelu podatków, po jednym na gęstość.
-- Wiersz pokazuje wyłącznie dopłatę danej gęstości. Łączna stawka mieszkaniowa gospodarstwa domowego to główna stawka mieszkaniowa plus jego własny wiersz.
-- Limity stawek poszerzono z domyślnych -10%..+30% do -1000%..+100%. Ujemna stawka wypłaca gospodarstwom domowym zamiast je obciążać.
-- Pięć osobnych wartości popytu na mieszkania, każda liczona, oceniana i budowana niezależnie.
-- Każda kwota to prawdziwe pieniądze przenoszone między portfelami gospodarstw domowych a skarbcem miasta, a szacunek pojawia się w natywnym panelu.
+- Pięć wierszy stawek we wbudowanym panelu podatków, po jednym na gęstość, każdy pokazuje własną dopłatę; łączna stawka gospodarstwa to stawka główna plus jego wiersz.
+- Limity stawek poszerzone z -10%..+30% do -1000%..+100%; stawka ujemna wypłaca gospodarstwom zamiast je obciążać.
 
 Jak to działa
-- To, który wiersz dotyczy gospodarstwa domowego, odczytywane jest z typu strefy jego budynku; budynki mieszkalne, których nie da się zidentyfikować, pozostają nietknięte.
-- Raz na dzień gry gospodarstwo domowe płaci: podstawa opodatkowania x jego dopłata gęstości / 100, obcięte do liczby całkowitej.
-- Podstawę liczy się na osobę, a nie na gospodarstwo domowe: dla każdego członka bierze się jego własny dochód minus próg i zachowuje tylko część powyżej zera.
-- Dochód osobisty działa według zasad podstawowej gry: pracujący członek liczy wynagrodzenie swojego poziomu wykształcenia, dzieci i nastolatki zasiłek rodzinny, seniorzy emeryturę, cała reszta zasiłek dla bezrobotnych.
-- Dochód poniżej progu liczy się jako zero, więc nie jest ani opodatkowany, ani wypłacany.
-- Dodatnia dopłata przenosi pieniądze z portfeli gospodarstw domowych do skarbca miasta, ujemna wypłaca gospodarstwom ze skarbca. Pieniądze tylko się przenoszą, nigdy nie są tworzone; pobrane kwoty księgowane są jako dochód z podatku mieszkaniowego, wypłaty jako subsydium mieszkaniowe.
-- Twój podstawowy podatek mieszkaniowy z gry pozostaje nietknięty: nadal działa na tej samej podstawie, a ten mod jedynie dolicza dopłatę ponad niego.
-- Każda gęstość liczy tylko własne budynki mieszkalne: łączne lokale, puste lokale oraz to, czy dany typ strefy jest odblokowany. Popyt = połowa podstawowego popytu gospodarstw domowych + wskaźnik pustostanów + podstawowe czynniki popytu, ograniczony do 0-100, a +1% dopłaty danej gęstości obniża jej popyt o jeden punkt.
-- Domy szeregowe korzystają z modelu czynników średniej gęstości, a budownictwo o niskim czynszu z modelu wysokiej gęstości, więc te pary różnią się tylko własnymi pustostanami, stanem odblokowania i dopłatą.
-- Każda gęstość buduje się niezależnie; jedna na zerze nigdy nie blokuje innej. Drogi, wielkość działki, wartość gruntu, odblokowania, kandydaci na budynki i tempo budowy pozostają zasadami podstawowej gry.
-- Zaznaczona polityka zwolnienia ustawia próg na wartość suwaka, odznaczona zmienia go na 0, co usuwa podstawowe zwolnienie od podatku i każda jednostka wynagrodzenia staje się opodatkowana. To to samo podstawowe zwolnienie, więc obejmuje zwolnieniem razem podatek bazowy i dopłatę, i tylko zwalnia - nigdy nie wypłaca. Zakres suwaka 0.01 do 50000, krok 100, domyślnie 2000.
-- Dopłaty zasilają podstawowy czynnik szczęścia „Podatki” jako równy wzrost efektywnej stawki mieszkaniowej, z podstawowym wzorem i czułością. Szacunki odświeżają się także w pauzie, a przeciąganie stawki korzysta z zapisanych wartości, więc nie zatrzymuje klatki.
+- Który wiersz obowiązuje, odczytuje się z typu strefy budynku; nierozpoznane mieszkalnictwo pozostaje bez zmian.
+- Na dzień gry gospodarstwo płaci podstawę opodatkowania razy swoją stawkę gęstości, podzielone przez 100 i obcięte.
+- Podstawa liczona jest na osobę: dochód każdego członka minus próg, zachowując tylko kwotę powyżej zera; dochód działa według domyślnych zasad płac, dodatków, emerytur i zasiłków.
+- Poniżej progu nie ma podatku ani wypłaty; stawka dodatnia wpłaca do skarbca miasta, ujemna wypłaca z niego. Domyślny podstawowy podatek mieszkaniowy pozostaje bez zmian, a mod dodaje tylko dopłatę.
+- Każda gęstość liczy własne mieszkalnictwo (lokale, pustostany, odblokowanie); popyt to połowa domyślnego popytu na gospodarstwa plus wskaźnik pustostanów plus domyślne czynniki, ograniczony do 0-100, minus jeden punkt za każde +1% stawki.
+- Domy szeregowe przejmują czynniki popytu średniej gęstości, a tania zabudowa wysokiej; każda gęstość buduje sama, więc jedna na zerze nigdy nie blokuje innej.
+- Zaznaczona polityka używa wartości suwaka, odznaczona daje 0, usuwając domyślny dodatek, więc wszystkie płace są opodatkowane; zwalnia razem podatek podstawowy i dopłatę i nigdy nie wypłaca. Zakres 0.01 do 50000, domyślnie 2000.
+- Dopłaty zasilają domyślny współczynnik szczęścia „Podatek” jako równy wzrost efektywnej stawki, z domyślną wrażliwością; szacunki odświeżają się także podczas pauzy.
 
 Русский:
-Пять ставок налога для жилых зон разной плотности — низкая плотность, таунхаусы, средняя, высокая и недорогое жильё — добавлены в стандартную панель налогов, каждая со своим спросом на жильё, плюс городская политика, задающая необлагаемый порог дохода.
 
-Что добавляет мод
-- Пять дополнительных строк со ставками в жилом разделе стандартной панели налогов, по одной на каждую плотность.
-- Строка показывает только надбавку этой плотности. Итоговая жилая ставка домохозяйства — это верхняя жилая ставка плюс его собственная строка.
-- Пределы ставок расширены с базовых -10%..+30% до -1000%..+100%. Отрицательная ставка выплачивает деньги домохозяйствам, а не взимает их.
-- Пять отдельных показателей спроса на жильё, каждый считается, оценивается и застраивается самостоятельно.
-- Каждая сумма — это реальные деньги, перемещаемые между кошельками домохозяйств и городской казной, а оценка отображается в стандартной панели.
+Пять налоговых ставок на жильё по плотности (низкая плотность, рядные дома, средняя, высокая, дешёвое жильё), у каждой свой спрос на жильё, плюс городская политика, задающая порог дохода, свободного от налога.
+
+Что добавляет
+- Пять строк ставок в штатной панели налогов, по одной на плотность, каждая со своей надбавкой; итоговая ставка домохозяйства — верхняя ставка плюс его строка.
+- Пределы ставок расширены с -10%..+30% до -1000%..+100%; отрицательная ставка платит домохозяйствам, а не взимает с них.
 
 Как это работает
-- Какая строка применяется к домохозяйству, определяется по типу зоны, к которой относится его здание; жильё, которое не удалось определить, остаётся без изменений.
-- Раз в игровой день домохозяйство должно заплатить: налоговая база x надбавка его плотности / 100, с отбрасыванием дробной части до целого числа.
-- База считается на человека, а не на домохозяйство: для каждого члена берётся его собственный доход минус порог, и учитывается только часть выше нуля.
-- Личный доход рассчитывается по базовому правилу: работающий член учитывает зарплату своего уровня образования, дети и подростки — семейное пособие, пожилые — пенсию, все остальные — пособие по безработице.
-- Доход ниже порога считается нулевым, поэтому он ни облагается налогом, ни выплачивается.
-- Положительная надбавка переводит деньги из кошельков домохозяйств в городскую казну, отрицательная — выплачивает домохозяйствам из казны. Деньги только перемещаются, они никогда не создаются; собранные суммы проводятся как доход от жилого налога, а выплаты — как жилая субсидия.
-- Ваш базовый жилой налог не меняется: он по-прежнему рассчитывается от той же базы, а мод лишь добавляет надбавку поверх него.
-- Каждая плотность учитывает только своё жильё: общее число единиц, пустующие единицы и то, открыт ли этот тип зоны. Спрос = половина базового спроса домохозяйств + доля пустующих + базовые факторы спроса, ограниченные диапазоном 0-100, а каждые +1% надбавки этой плотности снижают её спрос на один пункт.
-- Таунхаусы используют модель факторов средней плотности, а недорогое жильё — модель высокой плотности, поэтому такие пары различаются только собственной долей пустующих, состоянием открытия и надбавкой.
-- Каждая плотность застраивается самостоятельно; нулевой спрос одной никогда не блокирует другую. Дороги, размер участка, стоимость земли, открытие, варианты зданий и скорость строительства остаются базовыми правилами.
-- Включённая политика освобождения задаёт порог равным значению ползунка, выключенная делает его равным 0, что убирает базовую необлагаемую сумму и делает облагаемой каждую единицу зарплаты. Это та же самая базовая сумма, поэтому она освобождает от налога и базовый налог, и надбавку вместе, и она только освобождает — никогда не выплачивает. Диапазон ползунка от 0.01 до 50000, шаг 100, по умолчанию 2000.
-- Надбавки влияют на базовый фактор счастья «Налоги» как равный рост эффективной жилой ставки, по базовой формуле и с той же чувствительностью. Оценки обновляются и на паузе, а при перетаскивании ползунка используются кэшированные значения, поэтому кадр не подвисает.
+- Какая строка применяется, определяется по типу зоны здания; нераспознанное жильё не затрагивается.
+- За игровой день домохозяйство платит свою налоговую базу, умноженную на ставку своей плотности, делённую на 100 и усечённую.
+- База считается на человека: доход каждого члена минус порог, остаётся только то, что выше нуля; доход следует штатным правилам зарплаты, пособия, пенсии и выплат.
+- Ниже порога не взимается и не выплачивается; положительная ставка идёт в городскую казну, отрицательная — из неё. Штатный базовый налог на жильё не затрагивается, мод добавляет только надбавку.
+- Каждая плотность считает своё жильё (единицы, вакансии, разблокировку); спрос — половина штатного спроса домохозяйств плюс доля вакансий плюс штатные факторы, ограниченные 0-100, минус одно очко за каждый +1% ставки.
+- Рядные дома берут факторы спроса средней плотности, а дешёвое жильё — высокой; каждая плотность строится сама по себе, поэтому нулевая одна никогда не блокирует другую.
+- Отмеченная политика использует значение ползунка, снятая становится 0, убирая штатное пособие, так что вся зарплата облагается налогом; она освобождает базовый налог и надбавку вместе и никогда не выплачивает. Диапазон от 0.01 до 50000, по умолчанию 2000.
+- Надбавки влияют на штатный фактор счастья «Налог» как равный рост эффективной ставки со штатной чувствительностью; оценки обновляются и на паузе.
 	</LongDescription>
 	<!--Thumbnail-->
 	<Thumbnail Value="Properties/Thumbnail.png" />
@@ -308,7 +235,7 @@ Jak to działa
 	<!--Link to the forum post where the mod can be discussed-->
 	<ForumLink Value="" />
 	<!--Version of the mod-->
-	<ModVersion Value="1.8.27" />
+	<ModVersion Value="1.8.28" />
 	<!--Recommended version of the base game to use the mod-->
 	<GameVersion Value="1.6.*" />
 	<!--Dependency for the mod, can be set multiple times-->
@@ -316,7 +243,7 @@ Jak to działa
 	<!--Required DLC, can be set multiple times. Supported values are "Landmark Buildings", "San Fransisco Set", "Beach Properties", "Urban Promenades", "Modern Architecture"-->
 	<RequiredDLC Value="" />
 	<!--Change log for new version. Single line or multi line. Supports minimal markdown subset-->
-	<ChangeLog>v1.8.27: Rewrites the description in all twelve languages to explain the whole calculation in plain words: per-person taxable basis, once-per-day settlement, the exemption threshold, the happiness link and the per-density demand model. Drops the fourth screenshot.`r`nv1.8.26: Store page images: the duplicate taxation-panel shot is replaced by a close-up of the five density surcharge rows, and the three headline panels now come first.`r`nv1.8.25: Removes the Arabic block from the store page description; the twelve remaining languages are exactly the languages the mod itself supports.`r`nv1.8.24: Source code published on GitHub under the MIT licence and linked from this page; description completed in all supported languages.`r`nv1.8.23: The mod is now published publicly on PDX Mods.`r`nv1.8.22: Removes the periodic full rescan (47 ms each time and unnecessary once the tax base is cached), throttles the exemption-threshold rescan to once per second, and logs the demand recompute cost every minute so the last unmeasured cost can be judged.`r`nv1.8.21: Cuts steady-state overhead: the happiness injection recomputes from the cached tax base, the steady rescan moved from three to thirty seconds, and the demand UI binding is only pushed when its content changes.`r`nv1.8.20: Rate changes recompute from a cached tax base instead of rescanning the city, so dragging a tax slider no longer tanks the frame rate.`r`nv1.8.19: Store assets only: new cover, five screenshots, description in five languages.`r`nv1.8.18: Removes the 1.8.17 ceiling: the density surcharge is treated as an equal rise of the effective rate, using the vanilla formula and sensitivity with no cap.`r`nv1.8.16: The density surcharge is levied per person: each household member contributes max(0, own income - exemption threshold), matching the vanilla exemption and the per-person happiness calculation; previously one exemption was subtracted per household, which overtaxed multi-earner households. Members use the vanilla education-level wage, family allowance, pension or unemployment benefit.`r`nv1.8.15: The five density surcharges now affect the vanilla "Tax" happiness factor through the city's TaxHappiness modifier, bound to the density tax switch.`r`nv1.8.14: The Residential Minimum Earnings policy now only exempts: households below the threshold pay nothing, and the mod no longer pays a shortfall subsidy. The old behaviour could drain the treasury, because a threshold far above any household income turned the subsidy into "threshold times surtax rate" applied to the whole city. Negative density rates still pay out, as those are an explicit setting.`r`nv1.8.12-v1.8.13: The five density rows now show the density surcharge itself rather than base rate plus surcharge (a row could read 10% while the mod collected nothing). Unticking the Residential Minimum Earnings policy now means a threshold of 0 instead of keeping the vanilla balancing value.`r`nv1.8.11: Fixes double taxation: the per-density settlement charged the base residential rate on top of the surcharge, but the vanilla tax system already collects that base rate from the same income, so households paid it twice. Settlement and the welfare gate now use only the surcharge; the row still displays base rate plus surcharge. Also restores the vanilla threshold when the policy is switched off, reads the threshold from a single source for both forecast and settlement, verifies the write and logs the outcome, reads pre-1.8.7 saves' density values as offsets from the base rate, lets the taxation panel patch degrade per field instead of losing all six integrations, and defers the slider-triggered forecast to the next UI frame instead of a 15 ms city-wide scan inside every slider event.`r`nv1.8.10: Adds native-language translations for all supported game languages and fixes the previous release metadata. Keeps the density tax panel patch, base-rate linkage and zero-surcharge handling.`r`nv1.8.8: Fixes the density tax panel patch signature so the five surcharge rows are restored. The 1.8.7 build could fail Harmony patch compilation and fall back to vanilla rows. Keeps base residential tax plus surcharge linkage, zero-surcharge handling and all-language localization.`r`n v1.8.7: Makes the five residential surcharge rows follow the native residential base tax rate. Changing the base residential rate now immediately updates surcharge row displays and estimates; changing a surcharge stores its offset from the base rate. Keeps the native policy icon and responsive estimate refresh.
+	<ChangeLog>v1.8.28: Rewrites the description in all twelve languages to explain the whole calculation in plain words: taxable basis, daily settlement, exemption threshold, happiness link and per-density demand. Drops the fourth screenshot. The 1.8.27 draft was rejected unpublished for exceeding the 20000-character description limit.`r`nv1.8.26: Store page images: the duplicate taxation-panel shot is replaced by a close-up of the five density surcharge rows, and the three headline panels now come first.`r`nv1.8.25: Removes the Arabic block from the store page description; the twelve remaining languages are exactly the languages the mod itself supports.`r`nv1.8.24: Source code published on GitHub under the MIT licence and linked from this page; description completed in all supported languages.`r`nv1.8.23: The mod is now published publicly on PDX Mods.`r`nv1.8.22: Removes the periodic full rescan (47 ms each time and unnecessary once the tax base is cached), throttles the exemption-threshold rescan to once per second, and logs the demand recompute cost every minute so the last unmeasured cost can be judged.`r`nv1.8.21: Cuts steady-state overhead: the happiness injection recomputes from the cached tax base, the steady rescan moved from three to thirty seconds, and the demand UI binding is only pushed when its content changes.`r`nv1.8.20: Rate changes recompute from a cached tax base instead of rescanning the city, so dragging a tax slider no longer tanks the frame rate.`r`nv1.8.19: Store assets only: new cover, five screenshots, description in five languages.`r`nv1.8.18: Removes the 1.8.17 ceiling: the density surcharge is treated as an equal rise of the effective rate, using the vanilla formula and sensitivity with no cap.`r`nv1.8.16: The density surcharge is levied per person: each household member contributes max(0, own income - exemption threshold), matching the vanilla exemption and the per-person happiness calculation; previously one exemption was subtracted per household, which overtaxed multi-earner households. Members use the vanilla education-level wage, family allowance, pension or unemployment benefit.`r`nv1.8.15: The five density surcharges now affect the vanilla "Tax" happiness factor through the city's TaxHappiness modifier, bound to the density tax switch.`r`nv1.8.14: The Residential Minimum Earnings policy now only exempts: households below the threshold pay nothing, and the mod no longer pays a shortfall subsidy. The old behaviour could drain the treasury, because a threshold far above any household income turned the subsidy into "threshold times surtax rate" applied to the whole city. Negative density rates still pay out, as those are an explicit setting.`r`nv1.8.12-v1.8.13: The five density rows now show the density surcharge itself rather than base rate plus surcharge (a row could read 10% while the mod collected nothing). Unticking the Residential Minimum Earnings policy now means a threshold of 0 instead of keeping the vanilla balancing value.`r`nv1.8.11: Fixes double taxation: the per-density settlement charged the base residential rate on top of the surcharge, but the vanilla tax system already collects that base rate from the same income, so households paid it twice. Settlement and the welfare gate now use only the surcharge; the row still displays base rate plus surcharge. Also restores the vanilla threshold when the policy is switched off, reads the threshold from a single source for both forecast and settlement, verifies the write and logs the outcome, reads pre-1.8.7 saves' density values as offsets from the base rate, lets the taxation panel patch degrade per field instead of losing all six integrations, and defers the slider-triggered forecast to the next UI frame instead of a 15 ms city-wide scan inside every slider event.`r`nv1.8.10: Adds native-language translations for all supported game languages and fixes the previous release metadata. Keeps the density tax panel patch, base-rate linkage and zero-surcharge handling.`r`nv1.8.8: Fixes the density tax panel patch signature so the five surcharge rows are restored. The 1.8.7 build could fail Harmony patch compilation and fall back to vanilla rows. Keeps base residential tax plus surcharge linkage, zero-surcharge handling and all-language localization.`r`n v1.8.7: Makes the five residential surcharge rows follow the native residential base tax rate. Changing the base residential rate now immediately updates surcharge row displays and estimates; changing a surcharge stores its offset from the base rate. Keeps the native policy icon and responsive estimate refresh.
 Earlier releases (v1.8.0-v1.8.5, v1.6.x and earlier): five residential demand categories with their own vacancies and surtaxes, native pre-construction selection, native-style UI, live per-density estimates, the zone-catalog performance fix and the expanded -1000%..+100% tax range.</ChangeLog>
 	<!--External link, can be set multiple times. supported types are "discord", "github", "youtube", "twitch", "x", "paypal", "patreon", "buymeacoffee", "kofi", "crowdin", "gitlab", "gofundme"-->
 	<ExternalLink Type="github" Url="https://github.com/caijiahangvip-sudo/TaxRateTweak" />

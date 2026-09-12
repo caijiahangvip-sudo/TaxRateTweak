@@ -2,7 +2,7 @@
  * Cities: Skylines II UI Module
  * Id: TaxRateTweak
  * Author: TaxRateTweak
- * Version: 1.8.27
+ * Version: 1.8.28
  * Dependencies:
  */
 
@@ -150,7 +150,7 @@ function registerDemand(registry) {
         };
     });
 
-    console.info("TaxRateTweak 1.8.27: five residential demand sections, toolbar bars and legends registered.");
+    console.info("TaxRateTweak 1.8.28: five residential demand sections, toolbar bars and legends registered.");
 }
 
 export default function register(registry) {
